@@ -1,38 +1,34 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace AdventOfCode.Solutions.Year2020
 {
 
     class Day01 : ASolution
     {
+        private readonly List<int> _input;
 
         public Day01() : base(01, 2020, "")
         {
+            _input = Input.SplitByNewline().Select(int.Parse).ToList();
         }
 
         protected override string SolvePartOne()
         {
-            var input = Input.SplitByNewline().Select(i => int.Parse(i)).ToList();
-
-            for (int i = 0; i < input.Count - 1; i++)
-                for (int j = i + 1; j < input.Count; j++)
-                    if (input[i] + input[j] == 2020)
-                        return (input[i] * input[j]).ToString();
+            for (var i = 0; i < _input.Count - 1; i++)
+                for (var j = i + 1; j < _input.Count; j++)
+                    if (_input[i] + _input[j] == 2020)
+                        return (_input[i] * _input[j]).ToString();
             return "";
         }
 
         protected override string SolvePartTwo()
         {
-            var input = Input.SplitByNewline().Select(i => int.Parse(i)).ToList();
-
-            for (int i = 0; i < input.Count - 2; i++)
-                for (int j = i + 1; j < input.Count - 1; j++)
-                    for (int k = i + 1; k < input.Count; k++)
-                        if (input[i] + input[j] + input[k] == 2020)
-                            return (input[i] * input[j] * input[k]).ToString();
+            for (var i = 0; i < _input.Count - 2; i++)
+                for (var j = i + 1; j < _input.Count - 1; j++)
+                    for (var k = i + 1; k < _input.Count; k++)
+                        if (_input[i] + _input[j] + _input[k] == 2020)
+                            return (_input[i] * _input[j] * _input[k]).ToString();
             return "";
         }
     }
