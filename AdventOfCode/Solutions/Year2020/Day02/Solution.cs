@@ -11,6 +11,13 @@ namespace AdventOfCode.Solutions.Year2020
         string Password
     );
 
+    public record RevisedEntry(
+        int FirstIndex,
+        int SecondIndex,
+        char Letter,
+        string Password
+    );
+
     class Day02 : ASolution
     {
         readonly List<Entry> _parsed = new List<Entry>();
@@ -37,7 +44,13 @@ namespace AdventOfCode.Solutions.Year2020
 
         protected override string SolvePartTwo()
         {
-            return null;
+            var parsedAgain = _parsed.Select(entry => new RevisedEntry(entry.Min - 1, entry.Max - 1, entry.Letter, entry.Password));
+
+            var numValids = parsedAgain
+                .Count(e => e.Password[e.FirstIndex] == e.Letter ^ e.Password[e.SecondIndex] == e.Letter);
+
+            return numValids.ToString();
+
         }
     }
 }
