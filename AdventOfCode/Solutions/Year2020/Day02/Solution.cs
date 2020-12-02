@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -14,6 +15,7 @@ namespace AdventOfCode.Solutions.Year2020
             public int Max { get; init; }
             public char Letter { get; init; }
             public string Password { get; init; }
+            public int LetterOccurences { get; init; }
         }
 
         List<Entry> _parsed = new List<Entry>();
@@ -30,8 +32,11 @@ namespace AdventOfCode.Solutions.Year2020
 
         protected override string SolvePartOne()
         {
+            var numValids = _parsed
+                .Select(entry => entry with { LetterOccurences = entry.Password.Count(c => entry.Letter == c) })
+                .Count(enrichedEntry => enrichedEntry.LetterOccurences >=  enrichedEntry.Min && enrichedEntry.LetterOccurences <= enrichedEntry.Max);
 
-            return "";
+            return numValids.ToString();
         }
 
         protected override string SolvePartTwo()
