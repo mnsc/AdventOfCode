@@ -7,25 +7,25 @@ namespace AdventOfCode.Solutions.Year2020
 
     class Day03 : ASolution
     {
-        private const int RIGHTMOVES = 3;
+
         int _slopeHeight;
         int _slopeWidth;
         char[,] _slope;
 
         public Day03() : base(03, 2020, "")
         {
-//            DebugInput =
-//@"..##.......
-//#...#...#..
-//.#....#..#.
-//..#.#...#.#
-//.#...##..#.
-//..#.##.....
-//.#.#.#....#
-//.#........#
-//#.##...#...
-//#...##....#
-//.#..#...#.#";
+            //            DebugInput =
+            //@"..##.......
+            //#...#...#..
+            //.#....#..#.
+            //..#.#...#.#
+            //.#...##..#.
+            //..#.##.....
+            //.#.#.#....#
+            //.#........#
+            //#.##...#...
+            //#...##....#
+            //.#..#...#.#";
             var rows = Input.SplitByNewline();
             var firstrow = rows[0];
             _slopeHeight = rows.Length;
@@ -43,21 +43,32 @@ namespace AdventOfCode.Solutions.Year2020
 
         protected override string SolvePartOne()
         {
-            int horisontalPos = RIGHTMOVES;
+            const int startHorisontalPos = 3;
+            const int startVerticalPos = 1;
+
+            var treeHits = SlideDownTheSlope(startHorisontalPos, startVerticalPos);
+            return treeHits.ToString();
+        }
+
+        private int SlideDownTheSlope(int startHorisontalPos, int startVerticalPos)
+        {
+            int horisontalPos = startHorisontalPos;
             int treeHits = 0;
-            for (int verticalPos = 1; verticalPos < _slopeHeight; verticalPos++)
+            for (int verticalPos = startVerticalPos; verticalPos < _slopeHeight; verticalPos++)
             {
                 var check = _slope[verticalPos, horisontalPos];
                 if (check == '#')
                 {
                     treeHits++;
                 }
-                
+
                 Console.WriteLine(new string('.', horisontalPos) + (check == '#' ? "# (ouch!)" : "O"));
-                horisontalPos = (horisontalPos + RIGHTMOVES) % _slopeWidth;
+                horisontalPos = (horisontalPos + startHorisontalPos) % _slopeWidth;
             }
-            return treeHits.ToString();
+
+            return treeHits;
         }
+
         protected override string SolvePartTwo()
         {
             return null;
