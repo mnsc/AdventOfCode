@@ -46,12 +46,14 @@ namespace AdventOfCode.Solutions.Year2020
             const int startHorisontalPos = 3;
             const int startVerticalPos = 1;
 
+            Console.WriteLine("Part 1!");
             var treeHits = SlideDownTheSlope(startHorisontalPos, startVerticalPos);
             return treeHits.ToString();
         }
 
         private int SlideDownTheSlope(int startHorisontalPos, int startVerticalPos)
         {
+            Console.WriteLine($"Here we go, starting from {startHorisontalPos} {startVerticalPos}!");
             int horisontalPos = startHorisontalPos;
             int treeHits = 0;
             for (int verticalPos = startVerticalPos; verticalPos < _slopeHeight; verticalPos++)
@@ -60,18 +62,28 @@ namespace AdventOfCode.Solutions.Year2020
                 if (check == '#')
                 {
                     treeHits++;
+                    Console.Write("Ouch! ");
                 }
 
-                Console.WriteLine(new string('.', horisontalPos) + (check == '#' ? "# (ouch!)" : "O"));
+                
                 horisontalPos = (horisontalPos + startHorisontalPos) % _slopeWidth;
             }
-
+            Console.WriteLine("");
+            Console.WriteLine("");
             return treeHits;
         }
 
         protected override string SolvePartTwo()
         {
-            return null;
+            Console.WriteLine("Part 2!");
+            var total = 1;
+            total *= SlideDownTheSlope(1, 1);
+            total *= SlideDownTheSlope(3, 1);
+            total *= SlideDownTheSlope(5, 1);
+            total *= SlideDownTheSlope(7, 1);
+            total *= SlideDownTheSlope(1, 2);
+
+            return total.ToString();
         }
     }
 }
