@@ -14,18 +14,18 @@ namespace AdventOfCode.Solutions.Year2020
 
         public Day03() : base(03, 2020, "")
         {
-            //            DebugInput =
-            //@"..##.......
-            //#...#...#..
-            //.#....#..#.
-            //..#.#...#.#
-            //.#...##..#.
-            //..#.##.....
-            //.#.#.#....#
-            //.#........#
-            //#.##...#...
-            //#...##....#
-            //.#..#...#.#";
+//            DebugInput =
+//@"..##.......
+//#...#...#..
+//.#....#..#.
+//..#.#...#.#
+//.#...##..#.
+//..#.##.....
+//.#.#.#....#
+//.#........#
+//#.##...#...
+//#...##....#
+//.#..#...#.#";
             var rows = Input.SplitByNewline();
             var firstrow = rows[0];
             _slopeHeight = rows.Length;
@@ -44,19 +44,19 @@ namespace AdventOfCode.Solutions.Year2020
         protected override string SolvePartOne()
         {
             const int startHorisontalPos = 3;
-            const int startVerticalPos = 1;
+            const int verticalJump = 1;
 
             Console.WriteLine("Part 1!");
-            var treeHits = SlideDownTheSlope(startHorisontalPos, startVerticalPos);
+            var treeHits = SlideDownTheSlope(startHorisontalPos, verticalJump);
             return treeHits.ToString();
         }
 
-        private int SlideDownTheSlope(int startHorisontalPos, int startVerticalPos)
+        private int SlideDownTheSlope(int startHorisontalPos, int verticalJump)
         {
-            Console.WriteLine($"Here we go, starting from {startHorisontalPos} {startVerticalPos}!");
+            Console.WriteLine($"Here we go, starting from {startHorisontalPos}, jumping {verticalJump}!");
             int horisontalPos = startHorisontalPos;
             int treeHits = 0;
-            for (int verticalPos = startVerticalPos; verticalPos < _slopeHeight; verticalPos++)
+            for (int verticalPos = 0 + verticalJump; verticalPos < _slopeHeight; verticalPos += verticalJump)
             {
                 var check = _slope[verticalPos, horisontalPos];
                 if (check == '#')
@@ -69,7 +69,7 @@ namespace AdventOfCode.Solutions.Year2020
                 horisontalPos = (horisontalPos + startHorisontalPos) % _slopeWidth;
             }
             Console.WriteLine("");
-            Console.WriteLine("");
+            Console.WriteLine($"Hits: {treeHits}");
             return treeHits;
         }
 
