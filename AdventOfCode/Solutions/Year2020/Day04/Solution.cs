@@ -1,31 +1,50 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace AdventOfCode.Solutions.Year2020
 {
     public class Passport
     {
-        public string byr; // (Birth Year)
-        public string iyr; // (Issue Year)
-        public string eyr; // (Expiration Year)
-        public string hgt; // (Height)
-        public string hcl; // (Hair Color)
-        public string ecl; // (Eye Color)
-        public string pid; // (Passport ID)
-        public string cid; // (Country ID)
+        string byr; // (Birth Year)
+        string iyr; // (Issue Year)
+        string eyr; // (Expiration Year)
+        string hgt; // (Height)
+        string hcl; // (Hair Color)
+        string ecl; // (Eye Color)
+        string pid; // (Passport ID)
+        string cid; // (Country ID)
 
-        public bool IsValid()
+
+        public Passport(string byr, string iyr, string eyr, string hgt, string hcl, string ecl, string pid, string cid)
         {
-            return
-                byr != null
-&& iyr != null
-&& eyr != null
-&& hgt != null
-&& hcl != null
-&& ecl != null
-&& pid != null
-//&& cid != null missing country is ok!
-;
+            if (byr == null)
+                throw new ArgumentNullException(nameof(byr));
+            this.byr = byr;
+
+            if (iyr == null)
+                throw new ArgumentNullException(nameof(iyr));
+            this.iyr = iyr;
+
+            if (eyr == null)
+                throw new ArgumentNullException(nameof(eyr));
+            this.eyr = eyr;
+
+            if (hgt == null)
+                throw new ArgumentNullException(nameof(hgt));
+            this.hgt = hgt;
+
+            if (hcl == null)
+                throw new ArgumentNullException(nameof(hcl));
+            this.hcl = hcl;
+
+            if (ecl == null)
+                throw new ArgumentNullException(nameof(ecl));
+            this.ecl = ecl;
+
+            if (pid == null)
+                throw new ArgumentNullException(nameof(pid));
+            this.pid = pid;
+            this.cid = cid;
         }
     }
     class Day04 : ASolution
@@ -34,27 +53,27 @@ namespace AdventOfCode.Solutions.Year2020
 
         public Day04() : base(04, 2020, "")
         {
-            //            DebugInput = @"ecl:gry pid:860033327 eyr:2020 hcl:#fffffd
-            //byr:1937 iyr:2017 cid:147 hgt:183cm
-
-            //iyr:2013 ecl:amb cid:350 eyr:2023 pid:028048884
-            //hcl:#cfa07d byr:1929
-
-            //hcl:#ae17e1 iyr:2013
-            //eyr:2024
-            //ecl:brn pid:760753108 byr:1931
-            //hgt:179cm
-
-            //hcl:#cfa07d eyr:2025 pid:166559648
-            //iyr:2011 ecl:brn hgt:59in
-            //";
-            var passportTmp = new Passport();
+            string byr = null;
+            string iyr = null;
+            string eyr = null;
+            string hgt = null;
+            string hcl = null;
+            string ecl = null;
+            string pid = null;
+            string cid = null;
             foreach (var line in Input.SplitByNewline(emptyLines: true))
             {
                 if (string.IsNullOrWhiteSpace(line))
                 {
-                    _passports.Add(passportTmp);
-                    passportTmp = new Passport();
+                    AddPassport(byr, iyr, eyr, hgt, hcl, ecl, pid, cid);
+                    byr = null;
+                    iyr = null;
+                    eyr = null;
+                    hgt = null;
+                    hcl = null;
+                    ecl = null;
+                    pid = null;
+                    cid = null;
                     continue;
                 }
                 foreach (var keyvalue in line.Split(" "))
@@ -63,38 +82,52 @@ namespace AdventOfCode.Solutions.Year2020
                     switch (split[0])
                     {
                         case "byr":
-                            passportTmp.byr = split[1];
+                            byr = split[1];
                             break;
                         case "iyr":
-                            passportTmp.iyr = split[1];
+                            iyr = split[1];
                             break;
                         case "eyr":
-                            passportTmp.eyr = split[1];
+                            eyr = split[1];
                             break;
                         case "hgt":
-                            passportTmp.hgt = split[1];
+                            hgt = split[1];
                             break;
                         case "hcl":
-                            passportTmp.hcl = split[1];
+                            hcl = split[1];
                             break;
                         case "ecl":
-                            passportTmp.ecl = split[1];
+                            ecl = split[1];
                             break;
                         case "pid":
-                            passportTmp.pid = split[1];
+                            pid = split[1];
                             break;
                         case "cid":
-                            passportTmp.cid = split[1];
+                            cid = split[1];
                             break;
                     }
                 }
             }
-            _passports.Add(passportTmp);
+            AddPassport(byr, iyr, eyr, hgt, hcl, ecl, pid, cid);
+        }
+
+        private void AddPassport(string byr, string iyr, string eyr, string hgt, string hcl, string ecl, string pid, string cid)
+        {
+            try
+            {
+                var passportTmp = new Passport(byr, iyr, eyr, hgt, hcl, ecl, pid, cid);
+                _passports.Add(passportTmp);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
         }
 
         protected override string SolvePartOne()
         {
-            return _passports.Count(prop => prop.IsValid()).ToString();
+            return _passports.Count.ToString();
         }
 
         protected override string SolvePartTwo()
