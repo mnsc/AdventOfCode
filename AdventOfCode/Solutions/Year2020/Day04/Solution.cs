@@ -18,25 +18,25 @@ namespace AdventOfCode.Solutions.Year2020
         string cid; // (Country ID)
 
 
-        public Passport(string byr, string iyr, string eyr, string hgt, string hcl, string ecl, string pid, string cid)
+        public Passport(string byr, string iyr, string eyr, string hgt, string hcl, string ecl, string pid, string cid, bool lax = false)
         {
             if (byr == null)
                 throw new ArgumentNullException(nameof(byr));
-            if (int.TryParse(byr, out int byrTmp) && byrTmp >= 1920 && byrTmp <= 2002)
+            if (lax || int.TryParse(byr, out var byrTmp) && byrTmp >= 1920 && byrTmp <= 2002)
                 this.byr = byr;
             else
                 throw new ArgumentOutOfRangeException(nameof(byr), byr);
 
             if (iyr == null)
                 throw new ArgumentNullException(nameof(iyr));
-            if (int.TryParse(iyr, out int iyrTmp) && iyrTmp >= 2010 && iyrTmp <= 2020)
+            if (lax || int.TryParse(iyr, out var iyrTmp) && iyrTmp >= 2010 && iyrTmp <= 2020)
                 this.iyr = iyr;
             else
                 throw new ArgumentOutOfRangeException(nameof(iyr), iyr);
 
             if (eyr == null)
                 throw new ArgumentNullException(nameof(eyr));
-            if (int.TryParse(eyr, out int eyrTmp) && eyrTmp >= 2020 && eyrTmp <= 2030)
+            if (lax || int.TryParse(eyr, out var eyrTmp) && eyrTmp >= 2020 && eyrTmp <= 2030)
                 this.eyr = eyr;
             else
                 throw new ArgumentOutOfRangeException(nameof(eyr), eyr);
@@ -44,28 +44,28 @@ namespace AdventOfCode.Solutions.Year2020
 
             if (hgt == null)
                 throw new ArgumentNullException(nameof(hgt));
-            if (ValidateHeight(hgt))
+            if (lax || ValidateHeight(hgt))
                 this.hgt = hgt;
             else
                 throw new ArgumentOutOfRangeException(nameof(hgt), hgt);
 
             if (hcl == null)
                 throw new ArgumentNullException(nameof(hcl));
-            if (ValidateHairColor(hcl))
+            if (lax || ValidateHairColor(hcl))
                 this.hcl = hcl;
             else
                 throw new ArgumentOutOfRangeException(nameof(hcl), hcl);
 
             if (ecl == null)
                 throw new ArgumentNullException(nameof(ecl));
-            if (ValidateEyeColor(ecl))
+            if (lax || ValidateEyeColor(ecl))
                 this.ecl = ecl;
             else
                 throw new ArgumentOutOfRangeException(nameof(ecl), ecl);
 
             if (pid == null)
                 throw new ArgumentNullException(nameof(pid));
-            if (ValidatePassportId(pid))
+            if (lax || ValidatePassportId(pid))
                 this.pid = pid;
             else
                 throw new ArgumentOutOfRangeException(nameof(pid), pid);
@@ -79,7 +79,7 @@ namespace AdventOfCode.Solutions.Year2020
             if (match.Groups.Count != 3)
                 return false;
 
-            int hgtTmp = int.Parse(match.Groups[1].Value);
+            var hgtTmp = int.Parse(match.Groups[1].Value);
             if (match.Groups[2].Value == "in")
             {
                 //If in, the number must be at least 59 and at most 76.
@@ -111,6 +111,7 @@ namespace AdventOfCode.Solutions.Year2020
     class Day04 : ASolution
     {
         private List<Passport> _passports = new List<Passport>();
+        private List<Passport> _passportsLax = new List<Passport>();
 
         public Day04() : base(04, 2020, "")
         {
@@ -128,6 +129,7 @@ namespace AdventOfCode.Solutions.Year2020
                 if (string.IsNullOrWhiteSpace(line))
                 {
                     AddPassport(byr, iyr, eyr, hgt, hcl, ecl, pid, cid);
+                    AddPassportLax(byr, iyr, eyr, hgt, hcl, ecl, pid, cid);
                     byr = null;
                     iyr = null;
                     eyr = null;
@@ -171,32 +173,44 @@ namespace AdventOfCode.Solutions.Year2020
                 }
             }
             AddPassport(byr, iyr, eyr, hgt, hcl, ecl, pid, cid);
+            AddPassportLax(byr, iyr, eyr, hgt, hcl, ecl, pid, cid);
         }
 
         private void AddPassport(string byr, string iyr, string eyr, string hgt, string hcl, string ecl, string pid, string cid)
         {
-            var dbg = $"{byr};{iyr};{eyr};{hgt};{hcl};{ecl};{pid};{cid}";
             try
             {
-
                 var passportTmp = new Passport(byr, iyr, eyr, hgt, hcl, ecl, pid, cid);
-                Console.WriteLine(dbg);
                 _passports.Add(passportTmp);
             }
             catch (ArgumentOutOfRangeException e)
             {
-                Console.WriteLine(dbg + ";Parameter out of range: " + e.Message);
+                Console.WriteLine("Parameter out of range: " + e.Message);
             }
             catch (ArgumentNullException e)
             {
-                Console.WriteLine(dbg + ";" + e.Message);
+                Console.WriteLine(e.Message);
             }
-
         }
-
+        private void AddPassportLax(string byr, string iyr, string eyr, string hgt, string hcl, string ecl, string pid, string cid)
+        {
+            try
+            {
+                var passportTmp = new Passport(byr, iyr, eyr, hgt, hcl, ecl, pid, cid, true);
+                _passportsLax.Add(passportTmp);
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Console.WriteLine("Parameter out of range: " + e.Message);
+            }
+            catch (ArgumentNullException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
         protected override string SolvePartOne()
         {
-            return null;
+            return _passportsLax.Count.ToString();
         }
 
         protected override string SolvePartTwo()
