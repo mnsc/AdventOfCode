@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace AdventOfCode.Solutions.Year2020
 {
@@ -12,26 +10,10 @@ namespace AdventOfCode.Solutions.Year2020
 
         public Day06() : base(06, 2020, "")
         {
-//            DebugInput = @"abc
-
-//a
-//b
-//c
-
-//ab
-//ac
-
-//a
-//a
-//a
-//a
-
-//b";
-
             _declarations = Input
-                .Split(new[] { "\r\r", "\n\n", "\r\n\r\n" }, StringSplitOptions.None)
-                .Select(group => group.Split(new[] { "\r", "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries).ToArray())
-                .ToArray();
+               .Split(new[] { "\r\r", "\n\n", "\r\n\r\n" }, StringSplitOptions.None)
+               .Select(group => group.Split(new[] { "\r", "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries).ToArray())
+               .ToArray();
         }
 
         protected override string SolvePartOne()
@@ -50,7 +32,18 @@ namespace AdventOfCode.Solutions.Year2020
 
         protected override string SolvePartTwo()
         {
-            return null;
+            return _declarations
+                .Select(
+                    group =>
+                    {
+                        var personsAnswers = group.Select(person => person.ToCharArray());
+                        var firstperson = personsAnswers.First();
+                        var intersected = personsAnswers.Aggregate(firstperson, (distinct, nextPerson) => distinct.Intersect(nextPerson).ToArray());
+                        return intersected.Length;
+                    }
+                )
+               .Sum()
+               .ToString();
         }
     }
 }
