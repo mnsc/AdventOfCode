@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace AdventOfCode.Solutions.Year2020
 {
@@ -10,18 +9,6 @@ namespace AdventOfCode.Solutions.Year2020
 
         public Day08() : base(08, 2020, "")
         {
-//            DebugInput = @"
-//nop +0
-//acc +1
-//jmp +4
-//acc +3
-//jmp -3
-//acc -99
-//acc +1
-//jmp -4
-//acc +6
-//";
-
         }
 
         protected override string SolvePartOne()
@@ -30,7 +17,7 @@ namespace AdventOfCode.Solutions.Year2020
 
             try
             {
-                int returnvalue = RunCode(code);
+                var returnvalue = RunCode(code);
             }
             catch (InfiniteLoopException ile)
             {
@@ -42,16 +29,50 @@ namespace AdventOfCode.Solutions.Year2020
 
         protected override string SolvePartTwo()
         {
+            var code = Input.SplitByNewline();
+            var returnvalue = 0;
+
+            for (var i = 0; i < code.Length; i++)
+            {
+                var codeCopy = (string[])code.Clone();
+                var line = codeCopy[i];
+                var parse = line.Split(" ");
+                var instr = parse[0];
+                var modified = false;
+                if (instr == "jmp")
+                {
+                    codeCopy[i] = codeCopy[i].Replace("jmp", "nop");
+                    modified = true;
+                }
+                if (instr == "nop")
+                {
+                    codeCopy[i] = codeCopy[i].Replace("nop", "jmp");
+                    modified = true;
+                }
+                if (modified)
+                {
+                    try
+                    {
+                        returnvalue = RunCode(codeCopy);
+                    }
+                    catch (Exception)
+                    {
+                        continue;
+                    }
+                    return returnvalue.ToString();
+                }
+            }
+
             return null;
         }
 
         private static int RunCode(string[] code)
         {
-            int ptr = 0;
-            int acc = 0;
-            HashSet<int> visited = new HashSet<int>();
+            var ptr = 0;
+            var acc = 0;
+            var visited = new HashSet<int>();
 
-            while (ptr <= code.Length)
+            while (ptr < code.Length)
             {
                 if (visited.Contains(ptr))
                 {
