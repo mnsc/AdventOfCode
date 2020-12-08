@@ -10,29 +10,53 @@ namespace AdventOfCode.Solutions.Year2020
 
         public Day08() : base(08, 2020, "")
         {
-            DebugInput = @"
-            nop +0
-            acc +1
-            jmp +4
-            acc +3
-            jmp -3
-            acc -99
-            acc +1
-            jmp -4
-            acc +6
-            ";
+//            DebugInput = @"
+//nop +0
+//acc +1
+//jmp +4
+//acc +3
+//jmp -3
+//acc -99
+//acc +1
+//jmp -4
+//acc +6
+//";
 
         }
 
         protected override string SolvePartOne()
         {
             var code = Input.SplitByNewline();
+
+            try
+            {
+                int returnvalue = RunCode(code);
+            }
+            catch (InfiniteLoopException ile)
+            {
+                return ile.Acc.ToString();
+                throw;
+            }
+            return null; // expected loop
+        }
+
+        protected override string SolvePartTwo()
+        {
+            return null;
+        }
+
+        private static int RunCode(string[] code)
+        {
             int ptr = 0;
             int acc = 0;
             HashSet<int> visited = new HashSet<int>();
 
-            while(ptr <= code.Length && visited.Contains(ptr) == false)
+            while (ptr <= code.Length)
             {
+                if (visited.Contains(ptr))
+                {
+                    throw new InfiniteLoopException("Infinte loop found!", acc);
+                }
                 visited.Add(ptr);
                 var line = code[ptr];
                 var parse = line.Split(" ");
@@ -54,12 +78,29 @@ namespace AdventOfCode.Solutions.Year2020
                         throw new Exception("Bad instr");
                 }
             }
-            return acc.ToString();
+            return acc;
+        }
+    }
+
+    class InfiniteLoopException : Exception
+    {
+        public int Acc { get; }
+        public InfiniteLoopException()
+        {
         }
 
-        protected override string SolvePartTwo()
+        public InfiniteLoopException(string message) : base(message)
         {
-            return null;
         }
+
+        public InfiniteLoopException(string message, int acc) : base(message)
+        {
+            Acc = acc;
+        }
+
+        public InfiniteLoopException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+
     }
 }
