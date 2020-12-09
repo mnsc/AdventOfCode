@@ -12,32 +12,6 @@ namespace AdventOfCode.Solutions.Year2020
 
         public Day09() : base(09, 2020, "")
         {
-//            DebugInput = @"
-//35
-//20
-//15
-//25
-//47
-//40
-//62
-//55
-//65
-//95
-//102
-//117
-//150
-//182
-//127
-//219
-//299
-//277
-//309
-//576
-//";
-            if (DebugInput != null)
-            {
-                preamble = 5;
-            }
 
         }
 
@@ -95,13 +69,24 @@ namespace AdventOfCode.Solutions.Year2020
                     for (int i = chk - 1; i > 2; i--)
                     {
                         long contSum = 0;
+                        long min = long.MaxValue;
+                        long max = 0;
                         for (int j = i; j > 0 - 1; j--)
                         {
-                            contSum += input[j];
+                            var current = input[j];
+                            contSum += current;
+                            if (current > max)
+                            {
+                                max = current;
+                            }
+                            if (current < min)
+                            {
+                                min = current;
+                            }
                             if (contSum == toCheck)
                             {
-                                return $"Missing number {toCheck} is sum of range {i} - {j}, lowest and highest is {input[j]}, {input[i]}. Answer: {input[i] + input[j]}";
-                                
+                                return $"Missing number {toCheck} is sum of range {i} - {j}, smallest and largest in range is {min}, {max}. Answer: {min + max}";
+
                             }
                         }
                     }
