@@ -72,6 +72,45 @@ namespace AdventOfCode.Solutions.Year2020
 
         protected override string SolvePartTwo()
         {
+            var input = Input.SplitByNewline().Select(long.Parse).ToArray();
+
+            for (int chk = preamble; chk < input.Length; chk++)
+            {
+                bool match = false;
+                var toCheck = input[chk];
+                for (int i = chk - 1; i > chk - preamble; i--)
+                {
+                    for (int j = i - 1; j > chk - preamble - 1; j--)
+                    {
+                        if (input[i] + input[j] == toCheck)
+                        {
+                            match = true;
+                            goto Hell;
+                        }
+                    }
+                }
+            Hell:
+                if (!match)
+                {
+                    for (int i = chk - 1; i > 2; i--)
+                    {
+                        long contSum = 0;
+                        for (int j = i; j > 0 - 1; j--)
+                        {
+                            contSum += input[j];
+                            if (contSum == toCheck)
+                            {
+                                return $"Missing number {toCheck} is sum of range {i} - {j}, lowest and highest is {input[j]}, {input[i]}. Answer: {input[i] + input[j]}";
+                                
+                            }
+                        }
+                    }
+                }
+
+
+            }
+
+
             return null;
         }
     }
