@@ -20,31 +20,32 @@ namespace AdventOfCode.Solutions.Year2020
         protected override string SolvePartTwo()
         {
             var adapters = Input.SplitByNewline().Append("0").Select(x => int.Parse(x)).OrderBy(x => x).ToArray();
-            var combinationsToDevice = new Dictionary<int, long>();
-            var largestAdapterIndex = adapters.Length - 1;
-            combinationsToDevice.Add(adapters[largestAdapterIndex], 1);
+            var lastIndex = adapters.Length - 1;
 
-            for (var i = largestAdapterIndex - 1; i >= 0; i--)
+            var combinationsFromAdapterToDevice = new Dictionary<int, long>();
+            combinationsFromAdapterToDevice.Add(adapters[lastIndex], 1);
+
+            for (var i = lastIndex - 1; i >= 0; i--)
             {
-                var current = adapters[i];
-                long currentCombinationsToDevice = 0;
-                if (i + 1 <= largestAdapterIndex && adapters[i + 1] - current <= 3)
+                var currentAdapter = adapters[i];
+                long fromCurrentToDevice = 0;
+                void CheckLaterAdapters(int lookForward)
                 {
-                    currentCombinationsToDevice += combinationsToDevice[adapters[i + 1]];
+                    if (i + lookForward <= lastIndex && adapters[i + lookForward] - currentAdapter <= 3)
+                    {
+                        fromCurrentToDevice += combinationsFromAdapterToDevice[adapters[i + lookForward]];
+                    }
                 }
-                if (i + 2 <= largestAdapterIndex && adapters[i + 2] - current <= 3)
-                {
-                    currentCombinationsToDevice += combinationsToDevice[adapters[i + 2]];
-                }
-                if (i + 3 <= largestAdapterIndex && adapters[i + 3] - current <= 3)
-                {
-                    currentCombinationsToDevice += combinationsToDevice[adapters[i + 3]];
-                }
+                CheckLaterAdapters(1);
+                CheckLaterAdapters(2);
+                CheckLaterAdapters(3);
 
-                combinationsToDevice.Add(current, currentCombinationsToDevice);
+                combinationsFromAdapterToDevice.Add(currentAdapter, fromCurrentToDevice);
             }
 
-            return combinationsToDevice.Last().Value.ToString();
+            return combinationsFromAdapterToDevice.Last().Value.ToString();
+
+
         }
     }
 }
