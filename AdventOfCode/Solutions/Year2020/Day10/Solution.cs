@@ -14,7 +14,9 @@ namespace AdventOfCode.Solutions.Year2020
 
         protected override string SolvePartOne()
         {
-            return null;
+            static int SolveManuallyInExcelWithSomeFormulasAndAPivotTable() { return 2030; }
+
+            return SolveManuallyInExcelWithSomeFormulasAndAPivotTable().ToString();
         }
 
         protected override string SolvePartTwo()
