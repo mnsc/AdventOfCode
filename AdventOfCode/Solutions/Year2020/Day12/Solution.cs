@@ -17,11 +17,6 @@ namespace AdventOfCode.Solutions.Year2020
 
         protected override string SolvePartOne()
         {
-            Position MoveNorth(Position pos, int amt) => pos with { Lng = pos.Lng - amt };
-            Position MoveEast(Position pos, int amt) => pos with { Lat = pos.Lat + amt };
-            Position MoveSouth(Position pos, int amt) => pos with { Lng = pos.Lng + amt };
-            Position MoveWest(Position pos, int amt) => pos with { Lat = pos.Lat - amt };
-
             var currentPosition = new Position(0, 0, 90);
 
             foreach (var instruction in _instructions)
@@ -31,15 +26,11 @@ namespace AdventOfCode.Solutions.Year2020
                     (var pos, ("R", var amt)) => pos with { Direction = (360 + pos.Direction + amt) % 360 },
                     (var pos, ("L", var amt)) => pos with { Direction = (360 + pos.Direction - amt) % 360 },
 
-                    (var pos, ("N", var amt)) => MoveNorth(pos, amt),
-                    (var pos, ("S", var amt)) => MoveSouth(pos, amt),
-                    (var pos, ("W", var amt)) => MoveWest(pos, amt),
-                    (var pos, ("E", var amt)) => MoveEast(pos, amt),
+                    (var pos, (var label, var amt)) when (pos.Direction == 0 && label == "F") || label == "N" => pos with { Lng = pos.Lng - amt },
+                    (var pos, (var label, var amt)) when (pos.Direction == 90 && label == "F") || label == "E" => pos with { Lat = pos.Lat + amt },
+                    (var pos, (var label, var amt)) when (pos.Direction == 180 && label == "F") || label == "S" => pos with { Lng = pos.Lng + amt },
+                    (var pos, (var label, var amt)) when (pos.Direction == 270 && label == "F") || label == "W" => pos with { Lat = pos.Lat - amt },
 
-                    (var pos, ("F", var amt)) and ((_, _, 90), (_, _)) => MoveEast(pos, amt),
-                    (var pos, ("F", var amt)) and ((_, _, 180), (_, _)) => MoveSouth(pos, amt),
-                    (var pos, ("F", var amt)) and ((_, _, 270), (_, _)) => MoveWest(pos, amt),
-                    (var pos, ("F", var amt)) and ((_, _, 0), (_, _)) => MoveNorth(pos, amt),
                     (var pos, var instr) => throw new ArgumentOutOfRangeException(pos.ToString() + "," + instr.ToString())
                 };
                 Console.WriteLine($"{instruction} -> {currentPosition}");
