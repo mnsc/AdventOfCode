@@ -79,6 +79,28 @@ namespace AdventOfCode.Solutions
                 .ToArray();
         }
 
+        public static char[,] ParseCharArray2D(this string input)
+        {
+            var lines = input
+                .Split(new[] { "\r", "\n", "\r\n" }, StringSplitOptions.None)
+                .Where(s => !string.IsNullOrWhiteSpace(s))
+                .ToArray();
+            
+            var firstrow = lines[0];
+            int height = lines.Length;
+            int width = firstrow.Length;
+
+            var returnValue  = new char[height, width];
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    returnValue[i, j] = lines[i][j];
+                }
+            }
+            return returnValue;
+        }
+
         public static string Reverse(this string str)
         {
             char[] arr = str.ToCharArray();
