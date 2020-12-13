@@ -5,6 +5,11 @@ namespace AdventOfCode.Solutions.Year2020
 
     class Day11 : ASolution
     {
+        enum Strategy
+        {
+            Immediate, Sight
+        }
+
         private readonly char[,] _startState;
 
         public Day11() : base(11, 2020, "")
@@ -22,7 +27,7 @@ L.LLLLLL.L
 L.LLLLL.LL";
             _startState = Input.ParseCharArray2D();
         }
-        private (bool, char[,]) Tick(char[,] inState)
+        private (bool, char[,]) Tick(char[,] inState, Strategy strategy)
         {
             var outState = new char[inState.GetLength(0), inState.GetLength(1)];
             var modified = false;
@@ -30,7 +35,7 @@ L.LLLLL.LL";
             {
                 for (var j = 0; j < inState.GetLength(1); j++)
                 {
-                    var neighboursOccupied = CountNeighbourSeatsOccupied(inState, i, j);
+                    var neighboursOccupied = CountNeighbourSeatsOccupied(inState, i, j, strategy);
                     if (neighboursOccupied == 0)
                     {
                         if (inState[i, j] == 'L')
@@ -65,7 +70,7 @@ L.LLLLL.LL";
             return (modified, outState);
         }
 
-        private int CountNeighbourSeatsOccupied(char[,] inState, int i, int j)
+        private int CountNeighbourSeatsOccupied(char[,] inState, int i, int j, Strategy strategy)
         {
             var occupied = 0;
             //I||
@@ -113,20 +118,23 @@ L.LLLLL.LL";
             PrintState(_startState);
 
             Console.WriteLine("Lets go!");
-            (var _, var currentState) = Tick(_startState);
+            (var _, var currentState) = Tick(_startState, Strategy.Immediate);
             PrintState(currentState);
             var stable = false;
             while (!stable)
             {
-                Console.WriteLine("");
-                Console.WriteLine("Tick!");
-                Console.WriteLine("");
-                (var modifiedNow, var newState) = Tick(currentState);
+                (var modifiedNow, var newState) = Tick(currentState, Strategy.Immediate);
                 PrintState(newState);
                 stable = !modifiedNow;
                 currentState = newState;
             }
 
+            var seatsOccupied = CountTotalOccupiedSeats(currentState);
+            return seatsOccupied.ToString();
+        }
+
+        private static int CountTotalOccupiedSeats(char[,] currentState)
+        {
             var seatsOccupied = 0;
             foreach (var seat in currentState)
             {
@@ -135,7 +143,8 @@ L.LLLLL.LL";
                     seatsOccupied++;
                 }
             }
-            return seatsOccupied.ToString();
+
+            return seatsOccupied;
         }
 
         private void PrintState(char[,] state)
