@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using static AdventOfCode.Solutions.Utilities;
 
 namespace AdventOfCode.Solutions.Year2020
 {
     public record Position(int Lat, int Lng, int Direction);
+
+
 
     class Day12 : ASolution
     {
@@ -33,15 +36,40 @@ namespace AdventOfCode.Solutions.Year2020
 
                     (var pos, var instr) => throw new ArgumentOutOfRangeException(pos.ToString() + "," + instr.ToString())
                 };
-                Console.WriteLine($"{instruction} -> {currentPosition}");
+                Debug.WriteLine($"{instruction} -> {currentPosition}");
             }
 
             return $"{currentPosition} => manhattan = {Math.Abs(currentPosition.Lat) + Math.Abs(currentPosition.Lng)}";
         }
 
+        public record Waypoint(int East, int North);
+        public record PositionPt2(int Lat, int Lng, Waypoint Waypoint);
+
         protected override string SolvePartTwo()
         {
-            return null;
+            var currentPosition = new PositionPt2(0, 0, new Waypoint(10, 1));
+
+            foreach (var instruction in _instructions)
+            {
+                currentPosition = (currentPosition, instruction) switch
+                {
+                    (var pos, var instr) when instr is ("R", 90) or ("L", 270) => pos with { Waypoint = new Waypoint(pos.Waypoint.North, -pos.Waypoint.East) },
+                    (var pos, var instr) when instr is ("R", 270) or ("L", 90) => pos with { Waypoint = new Waypoint(-pos.Waypoint.North, pos.Waypoint.East) },
+                    (var pos, var instr) when instr is ("R", 180) or ("L", 180) => pos with { Waypoint = new Waypoint(-pos.Waypoint.East, -pos.Waypoint.North) },
+
+                    (var pos, (var lbl, var amt)) when lbl == "N" => pos with { Waypoint = new Waypoint(pos.Waypoint.East, pos.Waypoint.North + amt) },
+                    (var pos, (var lbl, var amt)) when lbl == "E" => pos with { Waypoint = new Waypoint(pos.Waypoint.East + amt, pos.Waypoint.North) },
+                    (var pos, (var lbl, var amt)) when lbl == "S" => pos with { Waypoint = new Waypoint(pos.Waypoint.East, pos.Waypoint.North - amt) },
+                    (var pos, (var lbl, var amt)) when lbl == "W" => pos with { Waypoint = new Waypoint(pos.Waypoint.East - amt, pos.Waypoint.North) },
+
+                    (var pos, ("F", var amt)) => pos with { Lat = pos.Lat + (amt * pos.Waypoint.East), Lng = pos.Lng + (amt * pos.Waypoint.North) },
+
+                    (var pos, var instr) => throw new ArgumentOutOfRangeException(pos.ToString() + "," + instr.ToString())
+                };
+                Debug.WriteLine($"{instruction} -> {currentPosition}");
+             }
+
+            return $"{currentPosition} => manhattan = {Math.Abs(currentPosition.Lat) + Math.Abs(currentPosition.Lng)}";
         }
     }
 }
