@@ -20,26 +20,26 @@ namespace AdventOfCode.Solutions.Year2020
 
         protected override string SolvePartOne()
         {
-            var currentPosition = new Position(0, 0, 90);
+            var pos = new Position(0, 0, 90);
 
             foreach (var instruction in _instructions)
             {
-                currentPosition = (currentPosition, instruction) switch
+                pos = instruction switch
                 {
-                    (var pos, ("R", var amt)) => pos with { Direction = (360 + pos.Direction + amt) % 360 },
-                    (var pos, ("L", var amt)) => pos with { Direction = (360 + pos.Direction - amt) % 360 },
+                    ("R", var amt) => pos with { Direction = (360 + pos.Direction + amt) % 360 },
+                    ("L", var amt) => pos with { Direction = (360 + pos.Direction - amt) % 360 },
 
-                    (var pos, (var label, var amt)) when (pos.Direction == 0 && label == "F") || label == "N" => pos with { Lng = pos.Lng - amt },
-                    (var pos, (var label, var amt)) when (pos.Direction == 90 && label == "F") || label == "E" => pos with { Lat = pos.Lat + amt },
-                    (var pos, (var label, var amt)) when (pos.Direction == 180 && label == "F") || label == "S" => pos with { Lng = pos.Lng + amt },
-                    (var pos, (var label, var amt)) when (pos.Direction == 270 && label == "F") || label == "W" => pos with { Lat = pos.Lat - amt },
+                    (var label, var amt) when (pos.Direction == 0 && label == "F") || label == "N" => pos with { Lng = pos.Lng - amt },
+                    (var label, var amt) when (pos.Direction == 90 && label == "F") || label == "E" => pos with { Lat = pos.Lat + amt },
+                    (var label, var amt) when (pos.Direction == 180 && label == "F") || label == "S" => pos with { Lng = pos.Lng + amt },
+                    (var label, var amt) when (pos.Direction == 270 && label == "F") || label == "W" => pos with { Lat = pos.Lat - amt },
 
-                    (var pos, var instr) => throw new ArgumentOutOfRangeException(pos.ToString() + "," + instr.ToString())
+                    var instr => throw new ArgumentOutOfRangeException(pos.ToString() + "," + instr.ToString())
                 };
-                Debug.WriteLine($"{instruction} -> {currentPosition}");
+                Debug.WriteLine($"{instruction} -> {pos}");
             }
 
-            return $"{currentPosition} => manhattan = {Math.Abs(currentPosition.Lat) + Math.Abs(currentPosition.Lng)}";
+            return $"{pos} => manhattan = {Math.Abs(pos.Lat) + Math.Abs(pos.Lng)}";
         }
 
         public record Waypoint(int East, int North);
