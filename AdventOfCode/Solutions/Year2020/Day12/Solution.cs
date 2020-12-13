@@ -47,29 +47,29 @@ namespace AdventOfCode.Solutions.Year2020
 
         protected override string SolvePartTwo()
         {
-            var currentPosition = new PositionPt2(0, 0, new Waypoint(10, 1));
+            var pos = new PositionPt2(0, 0, new Waypoint(10, 1));
 
             foreach (var instruction in _instructions)
             {
-                currentPosition = (currentPosition, instruction) switch
+                pos = instruction switch
                 {
-                    (var pos, var instr) when instr is ("R", 90) or ("L", 270) => pos with { Waypoint = new Waypoint(pos.Waypoint.North, -pos.Waypoint.East) },
-                    (var pos, var instr) when instr is ("R", 270) or ("L", 90) => pos with { Waypoint = new Waypoint(-pos.Waypoint.North, pos.Waypoint.East) },
-                    (var pos, var instr) when instr is ("R", 180) or ("L", 180) => pos with { Waypoint = new Waypoint(-pos.Waypoint.East, -pos.Waypoint.North) },
+                    ("R", 90) or ("L", 270) => pos with { Waypoint = new Waypoint(pos.Waypoint.North, -pos.Waypoint.East) },
+                    ("R", 270) or ("L", 90) => pos with { Waypoint = new Waypoint(-pos.Waypoint.North, pos.Waypoint.East) },
+                    ("R", 180) or ("L", 180) => pos with { Waypoint = new Waypoint(-pos.Waypoint.East, -pos.Waypoint.North) },
 
-                    (var pos, (var lbl, var amt)) when lbl == "N" => pos with { Waypoint = new Waypoint(pos.Waypoint.East, pos.Waypoint.North + amt) },
-                    (var pos, (var lbl, var amt)) when lbl == "E" => pos with { Waypoint = new Waypoint(pos.Waypoint.East + amt, pos.Waypoint.North) },
-                    (var pos, (var lbl, var amt)) when lbl == "S" => pos with { Waypoint = new Waypoint(pos.Waypoint.East, pos.Waypoint.North - amt) },
-                    (var pos, (var lbl, var amt)) when lbl == "W" => pos with { Waypoint = new Waypoint(pos.Waypoint.East - amt, pos.Waypoint.North) },
+                    ("N", var amt) => pos with { Waypoint = new Waypoint(pos.Waypoint.East, pos.Waypoint.North + amt) },
+                    ("E", var amt) => pos with { Waypoint = new Waypoint(pos.Waypoint.East + amt, pos.Waypoint.North) },
+                    ("S", var amt) => pos with { Waypoint = new Waypoint(pos.Waypoint.East, pos.Waypoint.North - amt) },
+                    ("W", var amt) => pos with { Waypoint = new Waypoint(pos.Waypoint.East - amt, pos.Waypoint.North) },
 
-                    (var pos, ("F", var amt)) => pos with { Lat = pos.Lat + (amt * pos.Waypoint.East), Lng = pos.Lng + (amt * pos.Waypoint.North) },
+                    ("F", var amt) => pos with { Lat = pos.Lat + (amt * pos.Waypoint.East), Lng = pos.Lng + (amt * pos.Waypoint.North) },
 
-                    (var pos, var instr) => throw new ArgumentOutOfRangeException(pos.ToString() + "," + instr.ToString())
+                    var instr => throw new ArgumentOutOfRangeException(pos.ToString() + "," + instr.ToString())
                 };
-                Debug.WriteLine($"{instruction} -> {currentPosition}");
+                Debug.WriteLine($"{instruction} -> {pos}");
              }
 
-            return $"{currentPosition} => manhattan = {Math.Abs(currentPosition.Lat) + Math.Abs(currentPosition.Lng)}";
+            return $"{pos} => manhattan = {Math.Abs(pos.Lat) + Math.Abs(pos.Lng)}";
         }
     }
 }
