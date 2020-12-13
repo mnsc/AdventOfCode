@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace AdventOfCode.Solutions.Year2020
 {
@@ -135,6 +136,7 @@ L.LLLLL.LL";
             }
 
             var seatsOccupied = CountTotalOccupiedSeats(currentState);
+            Debug.Assert(seatsOccupied == 37);
             return seatsOccupied.ToString();
         }
 
