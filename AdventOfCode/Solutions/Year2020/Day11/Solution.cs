@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 
 namespace AdventOfCode.Solutions.Year2020
 {
@@ -15,19 +14,9 @@ namespace AdventOfCode.Solutions.Year2020
 
         public Day11() : base(11, 2020, "")
         {
-            DebugInput =
-@"L.LL.LL.LL
-LLLLLLL.LL
-L.L.L..L..
-LLLL.LL.LL
-L.LL.LL.LL
-L.LLLLL.LL
-..L.L.....
-LLLLLLLLLL
-L.LLLLLL.L
-L.LLLLL.LL";
             _startState = Input.ParseCharArray2D();
         }
+
         private (bool, char[,]) Tick(char[,] inState, Strategy strategy)
         {
             var outState = new char[inState.GetLength(0), inState.GetLength(1)];
@@ -76,7 +65,7 @@ L.LLLLL.LL";
             var occupied = 0;
             //↖
             {
-                int step = 1;
+                var step = 1;
                 while (i - step >= 0 && j - step >= 0)
                 {
                     if (inState[i - step, j - step] != '.')
@@ -96,14 +85,14 @@ L.LLLLL.LL";
             }
             //⬆
             {
-                int step = 1;
+                var step = 1;
                 while (i - step >= 0)
                 {
                     if (inState[i - step, j] != '.')
                     {
                         occupied += inState[i - step, j] == '#' ? 1 : 0;
                         break;
-                    }                 
+                    }
                     else if (strategy == Strategy.Sight)
                     {
                         step++;
@@ -117,14 +106,14 @@ L.LLLLL.LL";
             }
             //↗
             {
-                int step = 1;
+                var step = 1;
                 while (i - step >= 0 && j + step < inState.GetLength(1))
                 {
                     if (inState[i - step, j + step] != '.')
                     {
                         occupied += inState[i - step, j + step] == '#' ? 1 : 0;
                         break;
-                    }                  
+                    }
                     else if (strategy == Strategy.Sight)
                     {
                         step++;
@@ -138,7 +127,7 @@ L.LLLLL.LL";
 
             //⬅
             {
-                int step = 1;
+                var step = 1;
                 while (j - step >= 0)
                 {
                     if (inState[i, j - step] != '.')
@@ -159,7 +148,7 @@ L.LLLLL.LL";
 
             //➡
             {
-                int step = 1;
+                var step = 1;
                 while (j + step < inState.GetLength(1))
                 {
                     if (inState[i, j + step] != '.')
@@ -180,7 +169,7 @@ L.LLLLL.LL";
 
             // ↙
             {
-                int step = 1;
+                var step = 1;
                 while (i + step < inState.GetLength(0) && j - step >= 0)
                 {
                     if (inState[i + step, j - step] != '.')
@@ -201,7 +190,7 @@ L.LLLLL.LL";
 
             //⬇
             {
-                int step = 1;
+                var step = 1;
                 while (i + step < inState.GetLength(0))
                 {
                     if (inState[i + step, j] != '.')
@@ -221,7 +210,7 @@ L.LLLLL.LL";
             }
             //↘
             {
-                int step = 1;
+                var step = 1;
                 while (i + step < inState.GetLength(0) && j + step < inState.GetLength(1))
                 {
                     if (inState[i + step, j + step] != '.')
@@ -240,15 +229,11 @@ L.LLLLL.LL";
                 }
             }
 
-
             return occupied;
         }
 
         protected override string SolvePartOne()
         {
-            PrintState(_startState);
-
-            Console.WriteLine("Lets go!");
             (var _, var currentState) = Tick(_startState, Strategy.Immediate);
             var stable = false;
             while (!stable)
@@ -259,7 +244,24 @@ L.LLLLL.LL";
             }
 
             var seatsOccupied = CountTotalOccupiedSeats(currentState);
-            Debug.Assert(seatsOccupied == 37);
+            return seatsOccupied.ToString();
+        }
+
+        protected override string SolvePartTwo()
+        {
+
+            Console.WriteLine("Lets go!");
+            (var _, var currentState) = Tick(_startState, Strategy.Sight);
+
+            var stable = false;
+            while (!stable)
+            {
+                (var modifiedNow, var newState) = Tick(currentState, Strategy.Sight);
+                stable = !modifiedNow;
+                currentState = newState;
+            }
+
+            var seatsOccupied = CountTotalOccupiedSeats(currentState);
             return seatsOccupied.ToString();
         }
 
@@ -275,42 +277,6 @@ L.LLLLL.LL";
             }
 
             return seatsOccupied;
-        }
-
-        private void PrintState(char[,] state)
-        {
-            for (var i = 0; i < state.GetLength(0); i++)
-            {
-                for (var j = 0; j < state.GetLength(1); j++)
-                {
-                    Console.Write(state[i, j]);
-                }
-                Console.WriteLine();
-            }
-        }
-
-        protected override string SolvePartTwo()
-        {
-            PrintState(_startState);
-
-            Console.WriteLine("Lets go!");
-            (var _, var currentState) = Tick(_startState, Strategy.Sight);
-            PrintState(currentState);
-
-            var stable = false;
-            while (!stable)
-            {
-                (var modifiedNow, var newState) = Tick(currentState, Strategy.Sight);
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine();
-                PrintState(newState);
-                stable = !modifiedNow;
-                currentState = newState;
-            }
-
-            var seatsOccupied = CountTotalOccupiedSeats(currentState);
-            return seatsOccupied.ToString();
         }
     }
 }
