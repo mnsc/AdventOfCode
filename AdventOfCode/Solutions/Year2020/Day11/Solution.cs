@@ -93,43 +93,130 @@ L.LLLLL.LL";
                 }
             }
             //⬅
-            if (i - 1 >= 0)
+            while (i - step >= 0)
             {
-                occupied += inState[i - 1, j] == '#' ? 1 : 0;
+                if (inState[i - step, j] == '#')
+                {
+                    occupied++;
+                    break;
+                }
+                else if (strategy == Strategy.Sight)
+                {
+                    step++;
+                }
+                else
+                {
+                    break;
+                }
             }
             // ↙
-            if (i - 1 >= 0 && j + 1 < inState.GetLength(1))
+            while (i - step >= 0 && j + step < inState.GetLength(1))
             {
-                occupied += inState[i - 1, j + 1] == '#' ? 1 : 0;
+                if (inState[i - step, j + step] == '#')
+                {
+                    occupied++;
+                    break;
+                }
+                else if (strategy == Strategy.Sight)
+                {
+                    step++;
+                }
+                else
+                {
+                    break;
+                }
             }
 
             //⬆
-            if (j - 1 >= 0)
+            while (j - step >= 0)
             {
-                occupied += inState[i, j - 1] == '#' ? 1 : 0;
+                if (inState[i, j - step] == '#')
+                {
+                    occupied++;
+                    break;
+                }
+                else if (strategy == Strategy.Sight)
+                {
+                    step++;
+                }
+                else
+                {
+                    break;
+                }
             }
 
             //⬇
-            if (j + 1 < inState.GetLength(1))
+            while (j + step < inState.GetLength(1))
             {
-                occupied += inState[i, j + 1] == '#' ? 1 : 0;
+                if (inState[i, j + step] == '#')
+                {
+                    occupied++;
+                    break;
+                }
+                else if (strategy == Strategy.Sight)
+                {
+                    step++;
+                }
+                else
+                {
+                    break;
+                }
             }
 
             //↗
-            if (i + 1 < inState.GetLength(0) && j - 1 >= 0)
+            while (i + step < inState.GetLength(0) && j - step >= 0)
             {
-                occupied += inState[i + 1, j - 1] == '#' ? 1 : 0;
+                if (inState[i + step, j - step] == '#')
+                {
+                    occupied++;
+                    break;
+                }
+                else if (strategy == Strategy.Sight)
+                {
+                    step++;
+                }
+                else
+                {
+                    break;
+                }
             }
+
             //➡
-            if (i + 1 < inState.GetLength(0))
+            while (i + step < inState.GetLength(0))
             {
-                occupied += inState[i + 1, j] == '#' ? 1 : 0;
+                if (inState[i + step, j] == '#')
+                {
+                    occupied++;
+                    break;
+                }
+                else if (strategy == Strategy.Sight)
+                {
+                    step++;
+                }
+                else
+                {
+                    break;
+                }
             }
             //↘
-            if (i + 1 < inState.GetLength(0) && j + 1 < inState.GetLength(1))
+            while (i + step < inState.GetLength(0) && j + step < inState.GetLength(1))
             {
-                occupied += inState[i + 1, j + 1] == '#' ? 1 : 0;
+                if (inState[i + step, j + step] == '#')
+                {
+                    occupied++;
+                    break;
+                }
+                else if (strategy == Strategy.Sight)
+                {
+                    step++;
+                }
+                else
+                {
+                    break;
+                }
             }
+
+          
             return occupied;
         }
 
