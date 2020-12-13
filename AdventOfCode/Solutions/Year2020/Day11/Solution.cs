@@ -74,153 +74,172 @@ L.LLLLL.LL";
         private int CountNeighbourSeatsOccupied(char[,] inState, int i, int j, Strategy strategy)
         {
             var occupied = 0;
-            int step = 1;
             //↖
-            while (i - step >= 0 && j - step >= 0)
             {
-                if(inState[i - step, j - step] == '#')
+                int step = 1;
+                while (i - step >= 0 && j - step >= 0)
                 {
-                    occupied++;
-                    break;
-                }
-                else if (strategy == Strategy.Sight)
-                {
-                    step++;
-                }
-                else
-                {
-                    step = 1;
-                    break;
+                    if (inState[i - step, j - step] == '#')
+                    {
+                        occupied++;
+                        break;
+                    }
+                    else if (strategy == Strategy.Sight)
+                    {
+                        step++;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
             //⬆
-            while (i - step >= 0)
             {
-                if (inState[i - step, j] == '#')
+                int step = 1;
+                while (i - step >= 0)
                 {
-                    occupied++;
-                    break;
-                }
-                else if (strategy == Strategy.Sight)
-                {
-                    step++;
-                }
-                else
-                {
-                    step = 1;
-                    break;
+                    if (inState[i - step, j] == '#')
+                    {
+                        occupied++;
+                        break;
+                    }
+                    else if (strategy == Strategy.Sight)
+                    {
+                        step++;
+                    }
+                    else
+                    {
+
+                        break;
+                    }
                 }
             }
             //↗
-            while (i - step >= 0 && j + step < inState.GetLength(1))
             {
-                if (inState[i - step, j + step] == '#')
+                int step = 1;
+                while (i - step >= 0 && j + step < inState.GetLength(1))
                 {
-                    occupied++;
-                    break;
-                }
-                else if (strategy == Strategy.Sight)
-                {
-                    step++;
-                }
-                else
-                {
-                    step = 1;
-                    break;
+                    if (inState[i - step, j + step] == '#')
+                    {
+                        occupied++;
+                        break;
+                    }
+                    else if (strategy == Strategy.Sight)
+                    {
+                        step++;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
 
             //⬅
-            while (j - step >= 0)
             {
-                if (inState[i, j - step] == '#')
+                int step = 1;
+                while (j - step >= 0)
                 {
-                    occupied++;
-                    break;
-                }
-                else if (strategy == Strategy.Sight)
-                {
-                    step++;
-                }
-                else
-                {
-                    step = 1;
-                    break;
+                    if (inState[i, j - step] == '#')
+                    {
+                        occupied++;
+                        step = 1;
+                        break;
+                    }
+                    else if (strategy == Strategy.Sight)
+                    {
+                        step++;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
 
             //➡
-            while (j + step < inState.GetLength(1))
             {
-                if (inState[i, j + step] == '#')
+                int step = 1;
+                while (j + step < inState.GetLength(1))
                 {
-                    occupied++;
-                    break;
-                }
-                else if (strategy == Strategy.Sight)
-                {
-                    step++;
-                }
-                else
-                {
-                    step = 1;
-                    break;
+                    if (inState[i, j + step] == '#')
+                    {
+                        occupied++;
+                        step = 1;
+                        break;
+                    }
+                    else if (strategy == Strategy.Sight)
+                    {
+                        step++;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
 
             // ↙
-            while (i + step < inState.GetLength(0) && j - step >= 0)
             {
-                if (inState[i + step, j - step] == '#')
+                int step = 1;
+                while (i + step < inState.GetLength(0) && j - step >= 0)
                 {
-                    occupied++;
-                    break;
-                }
-                else if (strategy == Strategy.Sight)
-                {
-                    step++;
-                }
-                else
-                {
-                    step = 1;
-                    break;
+                    if (inState[i + step, j - step] == '#')
+                    {
+                        occupied++;
+                        step = 1;
+                        break;
+                    }
+                    else if (strategy == Strategy.Sight)
+                    {
+                        step++;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
 
             //⬇
-            while (i + step < inState.GetLength(0))
             {
-                if (inState[i + step, j] == '#')
+                int step = 1;
+                while (i + step < inState.GetLength(0))
                 {
-                    occupied++;
-                    break;
-                }
-                else if (strategy == Strategy.Sight)
-                {
-                    step++;
-                }
-                else
-                {
-                    step = 1;
-                    break;
+                    if (inState[i + step, j] == '#')
+                    {
+                        occupied++;
+                        break;
+                    }
+                    else if (strategy == Strategy.Sight)
+                    {
+                        step++;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
             //↘
-            while (i + step < inState.GetLength(0) && j + step < inState.GetLength(1))
             {
-                if (inState[i + step, j + step] == '#')
+                int step = 1;
+                while (i + step < inState.GetLength(0) && j + step < inState.GetLength(1))
                 {
-                    occupied++;
-                    break;
-                }
-                else if (strategy == Strategy.Sight)
-                {
-                    step++;
-                }
-                else
-                {
-                    step = 1;
-                    break;
+                    if (inState[i + step, j + step] == '#')
+                    {
+                        occupied++;
+                        break;
+                    }
+                    else if (strategy == Strategy.Sight)
+                    {
+                        step++;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
 
