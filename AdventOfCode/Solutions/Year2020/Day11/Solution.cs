@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace AdventOfCode.Solutions.Year2020
 {
@@ -48,7 +48,7 @@ L.LLLLL.LL";
                             outState[i, j] = inState[i, j];
                         }
                     }
-                    else if (neighboursOccupied >= 4)
+                    else if (neighboursOccupied >= (strategy == Strategy.Immediate ? 4 : 5))
                     {
                         if (inState[i, j] == '#')
                         {
@@ -73,39 +73,46 @@ L.LLLLL.LL";
         private int CountNeighbourSeatsOccupied(char[,] inState, int i, int j, Strategy strategy)
         {
             var occupied = 0;
-            //I||
+  
+            //↖
             if (i - 1 >= 0 && j - 1 >= 0)
             {
                 occupied += inState[i - 1, j - 1] == '#' ? 1 : 0;
             }
+            //⬅
             if (i - 1 >= 0)
             {
                 occupied += inState[i - 1, j] == '#' ? 1 : 0;
             }
+            // ↙
             if (i - 1 >= 0 && j + 1 < inState.GetLength(1))
             {
                 occupied += inState[i - 1, j + 1] == '#' ? 1 : 0;
             }
 
-            //|I|
+            //⬆
             if (j - 1 >= 0)
             {
                 occupied += inState[i, j - 1] == '#' ? 1 : 0;
             }
+
+            //⬇
             if (j + 1 < inState.GetLength(1))
             {
                 occupied += inState[i, j + 1] == '#' ? 1 : 0;
             }
 
-            //||I
+            //↗
             if (i + 1 < inState.GetLength(0) && j - 1 >= 0)
             {
                 occupied += inState[i + 1, j - 1] == '#' ? 1 : 0;
             }
+            //➡
             if (i + 1 < inState.GetLength(0))
             {
                 occupied += inState[i + 1, j] == '#' ? 1 : 0;
             }
+            //↘
             if (i + 1 < inState.GetLength(0) && j + 1 < inState.GetLength(1))
             {
                 occupied += inState[i + 1, j + 1] == '#' ? 1 : 0;
@@ -119,12 +126,10 @@ L.LLLLL.LL";
 
             Console.WriteLine("Lets go!");
             (var _, var currentState) = Tick(_startState, Strategy.Immediate);
-            PrintState(currentState);
             var stable = false;
             while (!stable)
             {
                 (var modifiedNow, var newState) = Tick(currentState, Strategy.Immediate);
-                PrintState(newState);
                 stable = !modifiedNow;
                 currentState = newState;
             }
@@ -161,7 +166,22 @@ L.LLLLL.LL";
 
         protected override string SolvePartTwo()
         {
-            return null;
+            PrintState(_startState);
+
+            Console.WriteLine("Lets go!");
+            (var _, var currentState) = Tick(_startState, Strategy.Sight);
+            PrintState(currentState);
+            var stable = false;
+            while (!stable)
+            {
+                (var modifiedNow, var newState) = Tick(currentState, Strategy.Sight);
+                PrintState(newState);
+                stable = !modifiedNow;
+                currentState = newState;
+            }
+
+            var seatsOccupied = CountTotalOccupiedSeats(currentState);
+            return seatsOccupied.ToString();
         }
     }
 }
