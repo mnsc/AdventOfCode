@@ -79,9 +79,9 @@ L.LLLLL.LL";
                 int step = 1;
                 while (i - step >= 0 && j - step >= 0)
                 {
-                    if (inState[i - step, j - step] == '#')
+                    if (inState[i - step, j - step] != '.')
                     {
-                        occupied++;
+                        occupied += inState[i - step, j - step] == '#' ? 1 : 0;
                         break;
                     }
                     else if (strategy == Strategy.Sight)
@@ -99,11 +99,11 @@ L.LLLLL.LL";
                 int step = 1;
                 while (i - step >= 0)
                 {
-                    if (inState[i - step, j] == '#')
+                    if (inState[i - step, j] != '.')
                     {
-                        occupied++;
+                        occupied += inState[i - step, j] == '#' ? 1 : 0;
                         break;
-                    }
+                    }                 
                     else if (strategy == Strategy.Sight)
                     {
                         step++;
@@ -120,11 +120,11 @@ L.LLLLL.LL";
                 int step = 1;
                 while (i - step >= 0 && j + step < inState.GetLength(1))
                 {
-                    if (inState[i - step, j + step] == '#')
+                    if (inState[i - step, j + step] != '.')
                     {
-                        occupied++;
+                        occupied += inState[i - step, j + step] == '#' ? 1 : 0;
                         break;
-                    }
+                    }                  
                     else if (strategy == Strategy.Sight)
                     {
                         step++;
@@ -141,10 +141,9 @@ L.LLLLL.LL";
                 int step = 1;
                 while (j - step >= 0)
                 {
-                    if (inState[i, j - step] == '#')
+                    if (inState[i, j - step] != '.')
                     {
-                        occupied++;
-                        step = 1;
+                        occupied += inState[i, j - step] == '#' ? 1 : 0;
                         break;
                     }
                     else if (strategy == Strategy.Sight)
@@ -163,10 +162,9 @@ L.LLLLL.LL";
                 int step = 1;
                 while (j + step < inState.GetLength(1))
                 {
-                    if (inState[i, j + step] == '#')
+                    if (inState[i, j + step] != '.')
                     {
-                        occupied++;
-                        step = 1;
+                        occupied += inState[i, j + step] == '#' ? 1 : 0;
                         break;
                     }
                     else if (strategy == Strategy.Sight)
@@ -185,10 +183,9 @@ L.LLLLL.LL";
                 int step = 1;
                 while (i + step < inState.GetLength(0) && j - step >= 0)
                 {
-                    if (inState[i + step, j - step] == '#')
+                    if (inState[i + step, j - step] != '.')
                     {
-                        occupied++;
-                        step = 1;
+                        occupied += inState[i + step, j - step] == '#' ? 1 : 0;
                         break;
                     }
                     else if (strategy == Strategy.Sight)
@@ -207,9 +204,9 @@ L.LLLLL.LL";
                 int step = 1;
                 while (i + step < inState.GetLength(0))
                 {
-                    if (inState[i + step, j] == '#')
+                    if (inState[i + step, j] != '.')
                     {
-                        occupied++;
+                        occupied += inState[i + step, j] == '#' ? 1 : 0;
                         break;
                     }
                     else if (strategy == Strategy.Sight)
@@ -227,9 +224,9 @@ L.LLLLL.LL";
                 int step = 1;
                 while (i + step < inState.GetLength(0) && j + step < inState.GetLength(1))
                 {
-                    if (inState[i + step, j + step] == '#')
+                    if (inState[i + step, j + step] != '.')
                     {
-                        occupied++;
+                        occupied += inState[i + step, j + step] == '#' ? 1 : 0;
                         break;
                     }
                     else if (strategy == Strategy.Sight)
@@ -243,7 +240,7 @@ L.LLLLL.LL";
                 }
             }
 
-          
+
             return occupied;
         }
 
@@ -299,7 +296,7 @@ L.LLLLL.LL";
             Console.WriteLine("Lets go!");
             (var _, var currentState) = Tick(_startState, Strategy.Sight);
             PrintState(currentState);
-           
+
             var stable = false;
             while (!stable)
             {
