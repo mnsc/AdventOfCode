@@ -92,7 +92,7 @@ L.LLLLL.LL";
                     break;
                 }
             }
-            //⬅
+            //⬆
             while (i - step >= 0)
             {
                 if (inState[i - step, j] == '#')
@@ -109,7 +109,7 @@ L.LLLLL.LL";
                     break;
                 }
             }
-            // ↙
+            //↗
             while (i - step >= 0 && j + step < inState.GetLength(1))
             {
                 if (inState[i - step, j + step] == '#')
@@ -127,7 +127,7 @@ L.LLLLL.LL";
                 }
             }
 
-            //⬆
+            //⬅
             while (j - step >= 0)
             {
                 if (inState[i, j - step] == '#')
@@ -145,7 +145,7 @@ L.LLLLL.LL";
                 }
             }
 
-            //⬇
+            //➡
             while (j + step < inState.GetLength(1))
             {
                 if (inState[i, j + step] == '#')
@@ -163,7 +163,7 @@ L.LLLLL.LL";
                 }
             }
 
-            //↗
+            // ↙
             while (i + step < inState.GetLength(0) && j - step >= 0)
             {
                 if (inState[i + step, j - step] == '#')
@@ -181,7 +181,7 @@ L.LLLLL.LL";
                 }
             }
 
-            //➡
+            //⬇
             while (i + step < inState.GetLength(0))
             {
                 if (inState[i + step, j] == '#')
@@ -272,10 +272,14 @@ L.LLLLL.LL";
             Console.WriteLine("Lets go!");
             (var _, var currentState) = Tick(_startState, Strategy.Sight);
             PrintState(currentState);
+           
             var stable = false;
             while (!stable)
             {
                 (var modifiedNow, var newState) = Tick(currentState, Strategy.Sight);
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine();
                 PrintState(newState);
                 stable = !modifiedNow;
                 currentState = newState;
