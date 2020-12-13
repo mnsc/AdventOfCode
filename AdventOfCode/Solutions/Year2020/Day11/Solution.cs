@@ -74,11 +74,23 @@ L.LLLLL.LL";
         private int CountNeighbourSeatsOccupied(char[,] inState, int i, int j, Strategy strategy)
         {
             var occupied = 0;
-  
+            int step = 1;
             //↖
-            if (i - 1 >= 0 && j - 1 >= 0)
+            while (i - step >= 0 && j - step >= 0)
             {
-                occupied += inState[i - 1, j - 1] == '#' ? 1 : 0;
+                if(inState[i - step, j - step] == '#')
+                {
+                    occupied++;
+                    break;
+                }
+                else if (strategy == Strategy.Sight)
+                {
+                    step++;
+                }
+                else
+                {
+                    break;
+                }
             }
             //⬅
             if (i - 1 >= 0)
