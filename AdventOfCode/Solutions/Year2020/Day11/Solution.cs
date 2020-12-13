@@ -89,6 +89,7 @@ L.LLLLL.LL";
                 }
                 else
                 {
+                    step = 1;
                     break;
                 }
             }
@@ -106,6 +107,7 @@ L.LLLLL.LL";
                 }
                 else
                 {
+                    step = 1;
                     break;
                 }
             }
@@ -123,6 +125,7 @@ L.LLLLL.LL";
                 }
                 else
                 {
+                    step = 1;
                     break;
                 }
             }
@@ -141,6 +144,7 @@ L.LLLLL.LL";
                 }
                 else
                 {
+                    step = 1;
                     break;
                 }
             }
@@ -159,6 +163,7 @@ L.LLLLL.LL";
                 }
                 else
                 {
+                    step = 1;
                     break;
                 }
             }
@@ -177,6 +182,7 @@ L.LLLLL.LL";
                 }
                 else
                 {
+                    step = 1;
                     break;
                 }
             }
@@ -195,6 +201,7 @@ L.LLLLL.LL";
                 }
                 else
                 {
+                    step = 1;
                     break;
                 }
             }
@@ -212,6 +219,7 @@ L.LLLLL.LL";
                 }
                 else
                 {
+                    step = 1;
                     break;
                 }
             }
