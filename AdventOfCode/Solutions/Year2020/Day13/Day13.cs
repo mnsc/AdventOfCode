@@ -33,8 +33,15 @@ namespace AdventOfCode.Solutions.Year2020
             foreach (var bus in buses)
             {
                 Console.WriteLine($"t mod {bus.busId} = {bus.remainder}");
-                Console.WriteLine($"100000000000000 mod {bus.busId} = {100000000000000 % bus.busId}");
-                Console.WriteLine("Not right!");
+                Console.WriteLine($"100000000000001 mod {bus.busId} = {100000000000001 % bus.busId}");
+                if (bus.busId == 29)
+                {
+                    Console.WriteLine("Yes!");
+                }
+                else
+                {
+                    Console.WriteLine("Not right!");
+                }
             }
             Console.WriteLine("So what is t?");
             Console.WriteLine("I'm remainded of a chinese problem... ");
