@@ -11,7 +11,8 @@ namespace AdventOfCode.Solutions.Year2020
 
         public Day13() : base(13, 2020, "")
         {
-
+            DebugInput = @"1068781
+7,13,x,x,59,x,31,19";
         }
 
         protected override string SolvePartOne()
@@ -28,24 +29,43 @@ namespace AdventOfCode.Solutions.Year2020
                 .Select((busId, idx) => (busId, idx))
                 .Where(x => x.busId != "x")
                 .Select(tuple => (busId: int.Parse(tuple.busId), remainder: tuple.idx))
-                .OrderBy(tuple => tuple.busId).ToArray();
+                .OrderByDescending(tuple => tuple.busId).ToArray();
 
             foreach (var bus in buses)
             {
-                Console.WriteLine($"t mod {bus.busId} = {bus.remainder}");
-                Console.WriteLine($"100000000000001 mod {bus.busId} = {100000000000001 % bus.busId}");
-                if (bus.busId == 29)
-                {
-                    Console.WriteLine("Yes!");
-                }
-                else
-                {
-                    Console.WriteLine("Not right!");
-                }
-            }
-            Console.WriteLine("So what is t?");
-            Console.WriteLine("I'm remainded of a chinese problem... ");
+                Console.WriteLine($"t mod {bus.busId} should be {bus.remainder}");
 
+            }
+
+            long t = 1068781;
+            int currentIndex = 0;
+            long jump = 1;
+            while (true)
+            {
+                if (t % buses[currentIndex].busId == buses[currentIndex].remainder)
+                {
+                    Console.WriteLine($"{t} % {buses[currentIndex].busId} == {buses[currentIndex].remainder}");
+
+                    bool allgood = true;
+                    for (int i = currentIndex; i < buses.Length; i++)
+                    {
+                        if (t % buses[i].busId != buses[i].remainder)
+                        {
+                            Console.WriteLine($"{t} % {buses[i].busId} != {buses[i].remainder}");
+                            allgood = false;
+                        }
+                    }
+                    if (!allgood)
+                    {
+                        Console.Write("Increasing jump from " + jump);
+                        jump *= buses[currentIndex].busId;
+                        Console.WriteLine(" to " + jump);
+                        currentIndex++;
+                    }
+                }
+
+                t = t + jump;
+            }
             return null;
         }
     }
