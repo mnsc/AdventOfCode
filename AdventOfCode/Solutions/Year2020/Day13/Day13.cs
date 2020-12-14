@@ -11,8 +11,7 @@ namespace AdventOfCode.Solutions.Year2020
 
         public Day13() : base(13, 2020, "")
         {
-            DebugInput = @"1068781
-7,13,x,x,59,x,31,19";
+
         }
 
         protected override string SolvePartOne()
@@ -31,42 +30,60 @@ namespace AdventOfCode.Solutions.Year2020
                 .Select(tuple => (busId: int.Parse(tuple.busId), remainder: tuple.idx))
                 .OrderByDescending(tuple => tuple.busId).ToArray();
 
+
+            Console.WriteLine("Input");
             foreach (var bus in buses)
             {
-                Console.WriteLine($"t mod {bus.busId} should be {bus.remainder}");
+                Console.WriteLine($"(t + {bus.remainder}) mod {bus.busId} should be 0");
 
             }
-
-            long t = 1068781;
+            Console.WriteLine();
+            Console.WriteLine("Lets go!");
+            Console.WriteLine();
+            long t = 0;
             int currentIndex = 0;
             long jump = 1;
             while (true)
             {
-                if (t % buses[currentIndex].busId == buses[currentIndex].remainder)
+                if ((t + buses[currentIndex].remainder) % buses[currentIndex].busId == 0)
                 {
-                    Console.WriteLine($"{t} % {buses[currentIndex].busId} == {buses[currentIndex].remainder}");
+                    Console.WriteLine($"Maybe {t}?");
 
                     bool allgood = true;
                     for (int i = currentIndex; i < buses.Length; i++)
                     {
-                        if (t % buses[i].busId != buses[i].remainder)
+                        if ((t + buses[i].remainder) % buses[i].busId == 0)
                         {
-                            Console.WriteLine($"{t} % {buses[i].busId} != {buses[i].remainder}");
+                            Console.WriteLine($"Ok... {t + buses[i].remainder} % {buses[i].busId} == 0");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Nooo! {t + buses[i].remainder} % {buses[i].busId} != 0 ({(t + buses[i].remainder) % buses[i].busId})");
                             allgood = false;
+                            break;
                         }
                     }
-                    if (!allgood)
+                    if (allgood)
                     {
-                        Console.Write("Increasing jump from " + jump);
-                        jump *= buses[currentIndex].busId;
-                        Console.WriteLine(" to " + jump);
-                        currentIndex++;
+                        Console.WriteLine();
+                        Console.WriteLine($"Wohoo!! {t} did it!");
+                        Console.WriteLine();
+                        foreach (var bus in buses)
+                        {
+                            Console.WriteLine($"{t} + {bus.remainder} = {t + bus.remainder} % {bus.busId} == 0");
+                        }
+                        return t.ToString();
                     }
+                    Console.WriteLine();
+                    Console.Write("Increasing jump from " + jump);
+                    jump *= buses[currentIndex].busId;
+                    Console.WriteLine(" to " + jump);
+                    Console.WriteLine();
+                    currentIndex++;
                 }
 
-                t = t + jump;
+                t += jump;
             }
-            return null;
         }
     }
 }
