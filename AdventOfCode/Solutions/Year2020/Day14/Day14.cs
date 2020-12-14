@@ -16,6 +16,10 @@ namespace AdventOfCode.Solutions.Year2020
 
         public Day14() : base(14, 2020, "")
         {
+            DebugInput = @"mask = 000000000000000000000000000000X1001X
+mem[42] = 100
+mask = 00000000000000000000000000000000X0XX
+mem[26] = 1";
             _input = Input
                 .SplitByNewline()
                 .Select(ConvertToInstruction)
@@ -43,8 +47,8 @@ namespace AdventOfCode.Solutions.Year2020
                 }
                 else
                 {
-                    var setValue = (WriteToMemory)instr;
-                    memory[setValue.Memory] = ApplyMask(setValue.Value, currentmask);
+                    var writeToMemory = (WriteToMemory)instr;
+                    memory[writeToMemory.Memory] = ApplyMask(writeToMemory.Value, currentmask);
                 }
             }
 
@@ -54,13 +58,47 @@ namespace AdventOfCode.Solutions.Year2020
         private long ApplyMask(int value, string mask)
         {
             var valueAsBits = Convert.ToString(value, 2).PadLeft(36, '0');
-            var masked = String.Concat(valueAsBits.Zip(mask, (v, mask) => mask == 'X' ? v : mask));
+            var masked = string.Concat(valueAsBits.Zip(mask, (v, mask) => mask == 'X' ? v : mask));
             return Convert.ToInt64(masked, 2);
         }
 
         protected override string SolvePartTwo()
         {
+
+            var memory = new Dictionary<int, long>();
+            string currentmask = "";
+            foreach (var instr in _input)
+            {
+                if (instr is ChangeMask)
+                {
+                    currentmask = ((ChangeMask)instr).NewMask;
+                }
+                else
+                {
+                    var writeToMemory = (WriteToMemory)instr;
+                    var setValue = ApplyMask(writeToMemory.Value, currentmask);
+                    var floatingAddress = ApplyMaskWithFloating(writeToMemory.Memory, currentmask);
+                    var addressesToWrite = GetAllFixedAddresses(floatingAddress);
+
+                    foreach (var address in addressesToWrite)
+                    {
+                        memory[address] = setValue;
+                    }
+                }
+            }
+
             return null;
+        }
+
+        private List<int> GetAllFixedAddresses(string floatingAddress)
+        {
+            return new List<int>{ 1, 2, 3};
+        }
+
+        private string ApplyMaskWithFloating(int value, string mask)
+        {
+            var valueAsBits = Convert.ToString(value, 2).PadLeft(36, '0');
+            return string.Concat(valueAsBits.Zip(mask, (v, mask) => mask == 'X' ? 'F' : mask == '1' ? '1' : v));
         }
     }
 }
