@@ -8,8 +8,6 @@ namespace AdventOfCode.Solutions.Year2020
 {
     public record Position(int Lat, int Lng, int Direction);
 
-
-
     class Day12 : ASolution
     {
         List<Instruction> _instructions;
