@@ -16,10 +16,10 @@ namespace AdventOfCode.Solutions.Year2020
 
         public Day14() : base(14, 2020, "")
         {
-            DebugInput = @"mask = 000000000000000000000000000000X1001X
-mem[42] = 100
-mask = 00000000000000000000000000000000X0XX
-mem[26] = 1";
+//            DebugInput = @"mask = 000000000000000000000000000000X1001X
+//mem[42] = 100
+//mask = 00000000000000000000000000000000X0XX
+//mem[26] = 1";
             _input = Input
                 .SplitByNewline()
                 .Select(ConvertToInstruction)
@@ -65,7 +65,7 @@ mem[26] = 1";
         protected override string SolvePartTwo()
         {
 
-            var memory = new Dictionary<int, long>();
+            var memory = new Dictionary<long, long>();
             string currentmask = "";
             foreach (var instr in _input)
             {
@@ -76,23 +76,33 @@ mem[26] = 1";
                 else
                 {
                     var writeToMemory = (WriteToMemory)instr;
-                    var setValue = ApplyMask(writeToMemory.Value, currentmask);
                     var floatingAddress = ApplyMaskWithFloating(writeToMemory.Memory, currentmask);
-                    var addressesToWrite = GetAllFixedAddresses(floatingAddress);
-
-                    foreach (var address in addressesToWrite)
+                    foreach (var address in GetAllFixedAddresses(floatingAddress))
                     {
-                        memory[address] = setValue;
+                        memory[address] = writeToMemory.Value;
                     }
                 }
             }
 
-            return null;
+
+            return $"memory total sum is: {memory.Sum(kv => kv.Value)}";
         }
 
-        private List<int> GetAllFixedAddresses(string floatingAddress)
+        private List<long> GetAllFixedAddresses(string floatingAddress)
         {
-            return new List<int>{ 1, 2, 3};
+            List<long> addresses = new List<long>();
+            var floatsWithPos = floatingAddress.Select((c, idx) => (c, idx)).Where(t => t.c == 'F').ToArray();
+            for (int i = 0; i < Math.Pow(2, floatsWithPos.Length); i++)
+            {
+                var bitCombo = Convert.ToString(i, 2).PadLeft(floatsWithPos.Length, '0');
+                var fixedAddress = floatingAddress.ToArray();
+                for (int j = 0; j < floatsWithPos.Length; j++)
+                {
+                    fixedAddress[floatsWithPos[j].idx] = bitCombo[j];
+                }
+                addresses.Add(Convert.ToInt64(string.Concat(fixedAddress), 2));
+            }
+            return addresses;
         }
 
         private string ApplyMaskWithFloating(int value, string mask)
